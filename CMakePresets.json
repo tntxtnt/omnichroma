@@ -1,0 +1,152 @@
+{
+  "version": 3,
+  "configurePresets": [
+    {
+      "name": "base",
+      "binaryDir": "${sourceDir}/build/${presetName}",
+      "installDir": "${sourceDir}/install/${presetName}",
+      "hidden": true
+    },
+    {
+      "name": "vcpkg-submodule",
+      "inherits": "base",
+      "toolchainFile": "${sourceDir}/vcpkg/scripts/buildsystems/vcpkg.cmake",
+      "hidden": true
+    },
+    {
+      "name": "windows-only",
+      "inherits": "base",
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
+      },
+      "hidden": true
+    },
+    {
+      "name": "linux-only",
+      "inherits": "base",
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Linux"
+      },
+      "hidden": true
+    },
+    {
+      "name": "vs2022",
+      "displayName": "Visual Studio 2022 64-bit, using vcpkg as submodule",
+      "inherits": [
+        "vcpkg-submodule",
+        "windows-only"
+      ],
+      "generator": "Visual Studio 17 2022",
+      "architecture": "x64"
+    },
+    {
+      "name": "vs2022-32",
+      "displayName": "Visual Studio 2022 32-bit, using vcpkg as submodule",
+      "inherits": "vs2022",
+      "architecture": "Win32"
+    },
+    {
+      "name": "ninjam-msvc",
+      "displayName": "Ninja Multi-Config MSVC, using vcpkg as submodule (run vcvars64.bat or vcvars32.bat first)",
+      "inherits": [
+        "vcpkg-submodule",
+        "windows-only"
+      ],
+      "generator": "Ninja Multi-Config",
+      "cacheVariables": {
+        "CMAKE_CXX_COMPILER": "cl"
+      }
+    },
+    {
+      "name": "ninjam-msys2-novcpkg",
+      "displayName": "Ninja Multi-Config MSYS2 MINGW (run in MINGW64 console)",
+      "inherits": "windows-only",
+      "generator": "Ninja Multi-Config",
+      "cacheVariables": {
+        "CMAKE_CXX_COMPILER": "g++"
+      }
+    },
+    {
+      "name": "ninjam-msys2",
+      "displayName": "Ninja Multi-Config MSYS2 MINGW (run in MINGW64 console), using vcpkg as submodule",
+      "inherits": [
+        "vcpkg-submodule",
+        "windows-only"
+      ],
+      "generator": "Ninja Multi-Config",
+      "cacheVariables": {
+        "CMAKE_CXX_COMPILER": "g++",
+        "VCPKG_TARGET_TRIPLET": "x64-mingw-dynamic"
+      }
+    },
+    {
+      "name": "ninjam-linux",
+      "displayName": "Ninja Multi-Config Linux, using vcpkg as submodule",
+      "inherits": [
+        "vcpkg-submodule",
+        "linux-only"
+      ],
+      "generator": "Ninja Multi-Config"
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "windows-only",
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
+      },
+      "hidden": true
+    },
+    {
+      "name": "linux-only",
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Linux"
+      },
+      "hidden": true
+    },
+    {
+      "name": "vs2022",
+      "configurePreset": "vs2022",
+      "displayName": "Visual Studio 2022 64-bit build, using vcpkg as submodule",
+      "inherits": "windows-only"
+    },
+    {
+      "name": "vs2022-32",
+      "configurePreset": "vs2022-32",
+      "displayName": "Visual Studio 2022 32-bit build, using vcpkg as submodule",
+      "inherits": "windows-only"
+    },
+    {
+      "name": "ninjam-msvc",
+      "configurePreset": "ninjam-msvc",
+      "displayName": "Ninja Multi-Config MSVC, using vcpkg as submodule",
+      "inherits": "windows-only"
+    },
+    {
+      "name": "ninjam-msys2-novcpkg",
+      "displayName": "Ninja Multi-Config MSYS2 MINGW build",
+      "configurePreset": "ninjam-msys2-novcpkg",
+      "inherits": "windows-only"
+    },
+    {
+      "name": "ninjam-msys2",
+      "displayName": "Ninja Multi-Config MSYS2 MINGW build, using vcpkg as submodule",
+      "configurePreset": "ninjam-msys2",
+      "inherits": "windows-only"
+    },
+    {
+      "name": "ninjam-linux",
+      "configurePreset": "ninjam-linux",
+      "displayName": "Ninja Multi-Config Linux build, using vcpkg as submodule",
+      "inherits": "linux-only"
+    }
+  ]
+}

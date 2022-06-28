@@ -1,0 +1,83 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "shell",
+			"label": "(ninjam-msys2-novcpkg) Debug build",
+			"command": "${env:MINGW_ROOT}/bin/cmake.exe",
+			"args": [
+				"--build",
+				"--preset",
+				"ninjam-msys2-novcpkg",
+				"--config",
+				"Debug",
+				"--target",
+				"${workspaceFolderBasename}"
+			],
+			"options": {
+				"cwd": "${workspaceFolder}",
+				"env": {
+					"PATH": "${env:PATH};${env:MINGW_ROOT}/bin"
+				}
+			},
+			"group": "build"
+		},
+		{
+			"type": "shell",
+			"label": "(ninjam-msys2) Debug build",
+			"command": "${env:MINGW_ROOT}/bin/cmake.exe",
+			"args": [
+				"--build",
+				"--preset",
+				"ninjam-msys2",
+				"--config",
+				"Debug",
+				"--target",
+				"${workspaceFolderBasename}"
+			],
+			"options": {
+				"cwd": "${workspaceFolder}",
+				"env": {
+					"PATH": "${env:PATH};${env:MINGW_ROOT}/bin"
+				}
+			},
+			"group": "build"
+		},
+		{
+			"type": "shell",
+			"label": "(ninjam-msvc) Debug build",
+			"command": "cmake",
+			"args": [
+				"--build",
+				"--preset",
+				"ninjam-msvc",
+				"--config",
+				"Debug",
+				"--target",
+				"${workspaceFolderBasename}"
+			],
+			"options": {
+				"cwd": "${workspaceFolder}"
+			},
+			"group": "build"
+		},
+		{
+			"type": "shell",
+			"label": "(ninjam-linux) Debug build",
+			"command": "cmake",
+			"args": [
+				"--build",
+				"--preset",
+				"ninjam-linux",
+				"--config",
+				"Debug",
+				"--target",
+				"${workspaceFolderBasename}"
+			],
+			"options": {
+				"cwd": "${workspaceFolder}"
+			},
+			"group": "build"
+		}
+	]
+}
