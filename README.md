@@ -15,6 +15,10 @@ My C++ implementation of fejesjoco's algorithm.
 
 ![256x128](img/719662361-256x128-128xy64.png) ![256x128-mt](img/719662361-256x128-128xy64-mt.png)
 
+Left are generated single-threaded-ly, right are generated multithreaded-ly (they are similar)
+
+Bigger images (512x512 \~ 621 KB, 2048x1024 \~ 5047 KB, 4096x4096 \~ 37562 KB) are in `img` folder.
+
 ```
 Seed = 719662361
 Num threads = 16
