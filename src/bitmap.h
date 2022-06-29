@@ -1,13 +1,9 @@
 #pragma once
 
 #include "color.h"
-#include <fmt/ostream.h>
-#include <iostream>
 #include <cstdint>
 #include <memory>
 #include <string>
-#include <fstream>
-#include <cstring> // std::memcpy
 
 #pragma pack(push, 2)
 struct BitmapFileHeader {
@@ -37,10 +33,9 @@ struct Bitmap24bitPixels {
     uint32_t width;
     uint32_t height;
     std::unique_ptr<Color[]> data;
-    Bitmap24bitPixels(uint32_t width, uint32_t height)
-    : width{width}, height{height}, data{std::make_unique<Color[]>(width * height)} {}
-    auto operator[](int i) const -> const Color* { return &data[i * width]; }
-    auto operator[](int i) -> Color* { return &data[i * width]; }
+    Bitmap24bitPixels(uint32_t width, uint32_t height);
+    auto operator[](int i) const -> const Color*;
+    auto operator[](int i) -> Color*;
 };
 
 struct Bitmap24bit {
@@ -48,27 +43,7 @@ struct Bitmap24bit {
     BitmapInformationHeader dib{};
     std::unique_ptr<uint32_t[]> data = nullptr;
 
-    Bitmap24bit(const Bitmap24bitPixels& image) {
-        dib.imageWidth = image.width;
-        dib.imageHeight = image.height;
-        const uint32_t rowByteSize = dib.imageWidth * sizeof(Color);
-        const uint32_t rowSize = rowByteSize / 4 + static_cast<int>(rowByteSize % 4 != 0);
-        const uint32_t dataSize = rowSize * dib.imageHeight;
-        dib.imageByteSize = dataSize * sizeof(uint32_t);
-        header.size += dib.imageByteSize;
-        data = std::make_unique<uint32_t[]>(dataSize);
-        for (uint32_t i = 0; i < dib.imageHeight; ++i)
-            std::memcpy(&data[i * rowSize], image[dib.imageHeight - 1 - i], rowByteSize);
-    }
+    Bitmap24bit(const Bitmap24bitPixels& image);
 
-    auto saveToFile(std::string_view filename) const -> bool {
-        if (std::ofstream ofs{filename.data(), std::ios::binary}) {
-            ofs.write(reinterpret_cast<const char*>(&header), sizeof(header));
-            ofs.write(reinterpret_cast<const char*>(&dib), sizeof(dib));
-            ofs.write(reinterpret_cast<const char*>(data.get()), dib.imageByteSize);
-            return true;
-        }
-        fmt::print(std::cerr, "Cannot open `out.bmp`\n");
-        return false;
-    }
+    auto saveToFile(std::string_view filename) const -> bool;
 };

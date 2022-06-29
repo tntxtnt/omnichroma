@@ -1,0 +1,26 @@
+name: build-linux
+on: [push, workflow_dispatch]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+
+      - uses: lukka/get-cmake@latest
+
+      - name: Restore artifacts, or setup vcpkg (do not install any package)
+        uses: lukka/run-vcpkg@v10
+
+      - name: Install x11-dev, OpenGL-dev
+        run: |
+          sudo apt install libx11-dev libxft-dev libxext-dev
+          sudo apt install libgl1-mesa-dev
+
+      - name: Run CMake consuming CMakePreset.json and vcpkg.json by mean of vcpkg.
+        uses: lukka/run-cmake@v10
+        with:
+          configurePreset: 'ninjam-linux'
+          buildPreset: 'ninjam-linux'

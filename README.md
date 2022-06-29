@@ -1,5 +1,38 @@
 # omnichroma
 
+## What
+https://codegolf.stackexchange.com/questions/22144/images-with-all-colors
+
+My C++ implementation of fejesjoco's algorithm.
+
+`main.cpp` generates all 6 image sizes, single thread and multithread (thread pool). Sample output:
+
+![sameple-output-images](img/sample-output-images.png)
+
+![32x16](img/719662361-32x16-16xy8.png) ![32x16-mt](img/719662361-32x16-16xy8-mt.png)
+
+![64x64](img/719662361-64x64-32xy32.png) ![64x64-mt](img/719662361-64x64-32xy32-mt.png)
+
+![256x128](img/719662361-256x128-128xy64.png) ![256x128-mt](img/719662361-256x128-128xy64-mt.png)
+
+```
+Seed = 719662361
+Num threads = 16
+32x16 single thread: repeat 100 times, total = 0.150843s, avg = 0.00150843s
+32x16 threadpool   : repeat 100 times, total = 0.9971447s, avg = 0.009971447s
+64x64 single thread: repeat 10 times, total = 0.5214949s, avg = 0.05214949s
+64x64 threadpool   : repeat 10 times, total = 1.2743839s, avg = 0.12743838999999998s
+256x128 single thread: repeat 1 time, total = 0.8621473s, avg = 0.8621473s
+256x128 threadpool   : repeat 1 time, total = 1.346049s, avg = 1.346049s
+512x512 single thread: repeat 1 time, total = 26.5719913s, avg = 26.5719913s
+512x512 threadpool   : repeat 1 time, total = 13.577951s, avg = 13.577951s
+2048x1024 single thread: repeat 1 time, total = 482.6002738s, avg = 482.6002738s
+2048x1024 threadpool   : repeat 1 time, total = 172.1309171s, avg = 172.1309171s
+4096x4096 threadpool   : repeat 1 time, total = 4140.7884682s, avg = 4140.7884682s
+```
+
+(my CPU is Ryzen 7 4800H)
+
 ## How to configure with CMake
 
 ### Linux
