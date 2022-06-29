@@ -15,7 +15,7 @@ auto timeit(std::string_view name, int repeat, Func&& f) {
 }
 
 auto main(int argc, char** argv) -> int {
-    const auto seed = 719662361; // std ::random_device{}();
+    const auto seed = std ::random_device{}();
     fmt::print("Seed = {}\n", seed);
 
     BS::thread_pool pool;
