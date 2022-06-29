@@ -1,5 +1,8 @@
 {
   "name": "omnichroma",
   "version": "0.0.1",
-  "dependencies": []
+  "dependencies": [
+    "fmt",
+    "bshoshany-thread-pool"
+  ]
 }
