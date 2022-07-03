@@ -19,3 +19,4 @@ jobs:
         with:
           configurePreset: 'vs2022'
           buildPreset: 'vs2022'
+          testPreset: 'vs2022'

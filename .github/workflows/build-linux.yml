@@ -24,3 +24,4 @@ jobs:
         with:
           configurePreset: 'ninjam-linux'
           buildPreset: 'ninjam-linux'
+          testPreset: 'ninjam-linux'
