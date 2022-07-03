@@ -5,7 +5,7 @@ https://codegolf.stackexchange.com/questions/22144/images-with-all-colors
 
 My C++ implementation of fejesjoco's algorithm.
 
-`main.cpp` generates all 6 image sizes, single thread and multithread (thread pool). Sample output:
+`main.cpp` generates all 6 image sizes, single thread and multithread (thread pool). Sample output (with `CoordSet = std::unordered_set<Coord>` (msvc)):
 
 ![sameple-output-images](img/sample-output-images.png)
 
@@ -36,6 +36,12 @@ Num threads = 16
 ```
 
 (my CPU is Ryzen 7 4800H)
+
+## What's new
+- v0.0.2: Produce reproducable images from `seed` (and starting point). Tested on Windows (msvc and msys2) and Linux (Ubuntu).
+  - Use a shuffle function from cppreference (`cppref_shuffle`) to generate random colors.
+  - Use identity function instead of `std::hash<int>{}()`. GCC uses identity function for hashing `int` while MSVC uses  hash.
+  - Use `CoordSet = boost::unordered_set<Coord, std::hash<Coord>>`. MSVC/GCC have different `std::unordered_set` implementation. Using `boost::unordere_set` makes `generate()` runs about 30% slower than `std::unordere_set`. I also tried various `tsl` hash sets but nothing beats `std::unordere_set`.
 
 ## How to configure with CMake
 
