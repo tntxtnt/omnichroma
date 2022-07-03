@@ -148,5 +148,67 @@
       "displayName": "Ninja Multi-Config Linux build, using vcpkg as submodule",
       "inherits": "linux-only"
     }
+  ],
+  "testPresets": [
+    {
+      "name": "base",
+      "hidden": true,
+      "output": {"outputOnFailure": true},
+      "execution": {"noTestsAction": "error", "stopOnFailure": true}
+    },
+    {
+      "name": "windows-only",
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
+      },
+      "hidden": true
+    },
+    {
+      "name": "linux-only",
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Linux"
+      },
+      "hidden": true
+    },
+    {
+      "name": "vs2022",
+      "configurePreset": "vs2022",
+      "displayName": "Visual Studio 2022 64-bit test, remember to pass -C <Debug/Release> to ctest",
+      "inherits": ["base", "windows-only"]
+    },
+    {
+      "name": "vs2022-32",
+      "configurePreset": "vs2022-32",
+      "displayName": "Visual Studio 2022 32-bit test, remember to pass -C <Debug/Release> to ctest",
+      "inherits": ["base", "windows-only"]
+    },
+    {
+      "name": "ninjam-msvc",
+      "configurePreset": "ninjam-msvc",
+      "displayName": "Ninja Multi-Config MSVC test, remember to pass -C <Debug/Release> to ctest",
+      "inherits": ["base", "windows-only"]
+    },
+    {
+      "name": "ninjam-msys2-novcpkg",
+      "displayName": "Ninja Multi-Config MSYS2 MINGW test, remember to pass -C <Debug/Release> to ctest",
+      "configurePreset": "ninjam-msys2-novcpkg",
+      "inherits": ["base", "windows-only"]
+    },
+    {
+      "name": "ninjam-msys2",
+      "displayName": "Ninja Multi-Config MSYS2 MINGW test, remember to pass -C <Debug/Release> to ctest",
+      "configurePreset": "ninjam-msys2",
+      "inherits": ["base", "windows-only"]
+    },
+    {
+      "name": "ninjam-linux",
+      "configurePreset": "ninjam-linux",
+      "displayName": "Ninja Multi-Config Linux test, remember to pass -C <Debug/Release> to ctest",
+      "inherits": ["base", "linux-only"]
+    }
   ]
 }

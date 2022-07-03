@@ -34,6 +34,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
   Boost::boost Boost::random
 )
 
+enable_testing()
 add_subdirectory(test/uniseed)
 
 set_property(DIRECTORY PROPERTY VS_STARTUP_PROJECT ${PROJECT_NAME})
