@@ -19,4 +19,5 @@ jobs:
         with:
           configurePreset: 'vs2022'
           buildPreset: 'vs2022'
-          testPresetCmdString: "[`--preset`, `vs2022`, `-C`, `Debug`]"
+          testPreset: 'vs2022'
+          testPresetCmdString: "[`--preset`, `$[env.TEST_PRESET_NAME]`, `-C`, `Debug`]"

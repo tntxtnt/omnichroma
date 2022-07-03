@@ -24,4 +24,5 @@ jobs:
         with:
           configurePreset: 'ninjam-linux'
           buildPreset: 'ninjam-linux'
-          testPresetCmdString: "[`--preset`, `ninjam-linux`, `-C`, `Debug`]"
+          testPreset: 'ninjam-linux'
+          testPresetCmdString: "[`--preset`, `$[env.TEST_PRESET_NAME]`, `-C`, `Debug`]"
