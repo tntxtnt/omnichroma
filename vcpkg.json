@@ -4,6 +4,9 @@
   "dependencies": [
     "fmt",
     "bshoshany-thread-pool",
-    "lodepng"
+    "lodepng",
+    "doctest",
+    "boost-random",
+    "boost-unordered"
   ]
 }
