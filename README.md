@@ -38,7 +38,7 @@ Num threads = 16
 (my CPU is Ryzen 7 4800H)
 
 ## What's new
-- v0.0.2: Produce reproducable images from `seed` (and starting point). Tested on Windows (msvc and msys2) and Linux (Ubuntu).
+- v0.0.2: Produce reproducable images from `seed` (and starting point). Tested on Windows (msvc and msys2) and Linux (Ubuntu). **Note**: 32-bit version will produce different images with 64-bit version (32-bit version will fail `uniseed` test).
   - Use a shuffle function from cppreference (`cppref_shuffle`) to generate random colors.
   - Use identity function instead of `std::hash<int>{}()`. GCC uses identity function for hashing `int` while MSVC uses  hash.
   - Use `CoordSet = boost::unordered_set<Coord, std::hash<Coord>>`. MSVC/GCC have different `std::unordered_set` implementation. Using `boost::unordered_set` makes `generate()` runs about 30% slower than `std::unordered_set`. I also tried various `tsl` hash sets but nothing beats `std::unordered_set`.
