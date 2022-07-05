@@ -10,7 +10,7 @@ jobs:
           submodules: true
 
       - name: Fix robin-map CMake config
-        run: cd vpckg; git apply ../robin-map-cmake-config.patch; cd ..
+        run: cd /home/runner/work/omnichroma/omnichroma/vcpkg; git apply ../robin-map-cmake-config.patch; cd ..
 
       - uses: lukka/get-cmake@latest
 
