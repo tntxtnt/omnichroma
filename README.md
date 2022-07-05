@@ -87,6 +87,28 @@ MSVC uses FNV-1a for `std::hash<int>` and their `std::unordered_set` seems to be
 
 `tsl`'s sets are supposed to be faster than `std::unordered_set`, especially `tsl::robin_set`. However it is not the case here.
 
+MSYS2 MINGW 64-bit (identity function):
+```
+Num threads = 16
+Benching image 256x128...
+  std::unordered_set: repeat 100 times, total = 162.998444s, avg = 1.629984s
+boost::unordered_set: repeat 100 times, total = 161.810234s, avg = 1.618102s
+  tsl::hopscotch_set: repeat 100 times, total = 168.453455s, avg = 1.684535s
+    tsl::ordered_set: repeat 100 times, total = 160.944399s, avg = 1.609444s
+     tsl::sparse_set: repeat 100 times, total = 163.738119s, avg = 1.637381s
+      tsl::robin_set: repeat 100 times, total = 168.433507s, avg = 1.684335s
+Benching image 512x512...
+  std::unordered_set: repeat 10 times, total = 252.864962s, avg = 25.286496s
+boost::unordered_set: repeat 10 times, total = 253.657342s, avg = 25.365734s
+  tsl::hopscotch_set: repeat 10 times, total = 200.076698s, avg = 20.007670s
+    tsl::ordered_set: repeat 10 times, total = 160.221289s, avg = 16.022129s
+     tsl::sparse_set: repeat 10 times, total = 171.639049s, avg = 17.163905s
+      tsl::robin_set: repeat 10 times, total = 186.689562s, avg = 18.668956s
+```
+
+`tsl`'s sets are faster than `std::unordered_set` hereh.
+
+
 ## How to configure with CMake
 
 ### Linux
