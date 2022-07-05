@@ -9,6 +9,9 @@ jobs:
         with:
           submodules: true
 
+      - name: Fix robin-map CMake config
+        run: cd vpckg; git apply ../robin-map-cmake-config.patch; cd ..
+
       - uses: lukka/get-cmake@latest
 
       - name: Restore artifacts, or setup vcpkg (do not install any package)

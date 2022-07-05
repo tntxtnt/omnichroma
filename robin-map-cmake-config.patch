@@ -1,0 +1,11 @@
+diff --git a/ports/robin-map/portfile.cmake b/ports/robin-map/portfile.cmake
+index ca5aa4b73..80834e7e8 100644
+--- a/ports/robin-map/portfile.cmake
++++ b/ports/robin-map/portfile.cmake
+@@ -16,3 +16,5 @@ vcpkg_cmake_config_fixup(CONFIG_PATH share/cmake/tsl-robin-map)
+ file(REMOVE_RECURSE "${CURRENT_PACKAGES_DIR}/debug")
+ 
+ file(INSTALL "${SOURCE_PATH}/LICENSE" DESTINATION "${CURRENT_PACKAGES_DIR}/share/${PORT}" RENAME copyright)
++
++configure_file("${CURRENT_PACKAGES_DIR}/share/${PORT}/tsl-robin-mapConfig.cmake" "${CURRENT_PACKAGES_DIR}/share/${PORT}/robin-mapConfig.cmake" COPYONLY)
+\ No newline at end of file
