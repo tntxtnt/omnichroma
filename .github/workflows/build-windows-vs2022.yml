@@ -9,9 +9,6 @@ jobs:
         with:
           submodules: true
 
-      - name: Fix robin-map CMake config
-        run: cd /home/runner/work/omnichroma/omnichroma/vcpkg; echo 'configure_file("${CURRENT_PACKAGES_DIR}/share/${PORT}/tsl-robin-mapConfig.cmake" "${CURRENT_PACKAGES_DIR}/share/${PORT}/robin-mapConfig.cmake" COPYONLY)' >> ports/robin-map/portfile.cmake
-
       - uses: lukka/get-cmake@latest
 
       - name: Restore artifacts, or setup vcpkg (do not install any package)

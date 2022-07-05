@@ -11,6 +11,9 @@
       "name": "vcpkg-submodule",
       "inherits": "base",
       "toolchainFile": "${sourceDir}/vcpkg/scripts/buildsystems/vcpkg.cmake",
+      "environment": {
+        "tsl-robin-map_DIR": "${sourceDir}/build/${presetName}/vcpkg_installed/x64-windows/share/robin-map"
+      },
       "hidden": true
     },
     {
