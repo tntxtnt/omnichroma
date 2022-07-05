@@ -11,7 +11,7 @@
       "name": "vcpkg-submodule",
       "inherits": "base",
       "toolchainFile": "${sourceDir}/vcpkg/scripts/buildsystems/vcpkg.cmake",
-      "environment": {
+      "cacheVariables": {
         "tsl-robin-map_DIR": "${sourceDir}/build/${presetName}/vcpkg_installed/$env{VCPKG_TARGET_TRIPLET}/share/robin-map"
       },
       "hidden": true
@@ -44,17 +44,23 @@
         "windows-only"
       ],
       "generator": "Visual Studio 17 2022",
-      "architecture": "x64"
+      "architecture": "x64",
+      "environment": {
+        "VCPKG_TARGET_TRIPLET": "x64-windows"
+      }
     },
     {
       "name": "vs2022-32",
       "displayName": "Visual Studio 2022 32-bit, using vcpkg as submodule",
       "inherits": "vs2022",
-      "architecture": "Win32"
+      "architecture": "Win32",
+      "environment": {
+        "VCPKG_TARGET_TRIPLET": "x86-windows"
+      }
     },
     {
       "name": "ninjam-msvc",
-      "displayName": "Ninja Multi-Config MSVC, using vcpkg as submodule (run vcvars64.bat or vcvars32.bat first)",
+      "displayName": "Ninja Multi-Config MSVC 64-bit, using vcpkg as submodule (run vcvars64.bat first)",
       "inherits": [
         "vcpkg-submodule",
         "windows-only"
@@ -62,6 +68,9 @@
       "generator": "Ninja Multi-Config",
       "cacheVariables": {
         "CMAKE_CXX_COMPILER": "cl"
+      },
+      "environment": {
+        "VCPKG_TARGET_TRIPLET": "x64-windows"
       }
     },
     {
@@ -82,7 +91,9 @@
       ],
       "generator": "Ninja Multi-Config",
       "cacheVariables": {
-        "CMAKE_CXX_COMPILER": "g++",
+        "CMAKE_CXX_COMPILER": "g++"
+      },
+      "environment": {
         "VCPKG_TARGET_TRIPLET": "x64-mingw-dynamic"
       }
     },
@@ -93,7 +104,10 @@
         "vcpkg-submodule",
         "linux-only"
       ],
-      "generator": "Ninja Multi-Config"
+      "generator": "Ninja Multi-Config",
+      "environment": {
+        "VCPKG_TRIPLET": "x64-linux"
+      }
     }
   ],
   "buildPresets": [
