@@ -14,15 +14,14 @@ jobs:
       - name: Restore artifacts, or setup vcpkg (do not install any package)
         uses: lukka/run-vcpkg@v10
 
-      - name: Install x11-dev, OpenGL-dev
-        run: |
-          sudo apt install libx11-dev libxft-dev libxext-dev
-          sudo apt install libgl1-mesa-dev
-
       - name: Run CMake consuming CMakePreset.json and vcpkg.json by mean of vcpkg.
         uses: lukka/run-cmake@v10
         with:
           configurePreset: 'ninjam-linux'
           buildPreset: 'ninjam-linux'
+          buildPresetCmdString: "[`--build`, `--preset`, `$[env.BUILD_PRESET_NAME]`, `--config`, `Release`]"
           testPreset: 'ninjam-linux'
-          testPresetCmdString: "[`--preset`, `$[env.TEST_PRESET_NAME]`, `-C`, `Debug`]"
+          testPresetCmdString: "[`--preset`, `$[env.TEST_PRESET_NAME]`, `-C`, `Release`]"
+
+      - name: Run benchmarks
+        run: ./build/ninjam-linux/bench/sets/Release/bench_sets

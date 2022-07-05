@@ -19,5 +19,9 @@ jobs:
         with:
           configurePreset: 'vs2022'
           buildPreset: 'vs2022'
+          buildPresetCmdString: "[`--build`, `--preset`, `$[env.BUILD_PRESET_NAME]`, `--config`, `Release`]"
           testPreset: 'vs2022'
-          testPresetCmdString: "[`--preset`, `$[env.TEST_PRESET_NAME]`, `-C`, `Debug`]"
+          testPresetCmdString: "[`--preset`, `$[env.TEST_PRESET_NAME]`, `-C`, `Release`]"
+
+      - name: Run benchmarks
+        run: ./build/ninjam-linux/bench/sets/Release/bench_sets

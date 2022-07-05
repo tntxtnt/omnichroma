@@ -8,8 +8,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-add_executable(${PROJECT_NAME}
-  src/main.cpp
+add_library(omnichroma STATIC
   src/omnichroma.h
   src/generate.h
   src/pixelsbuffer.h
@@ -26,15 +25,23 @@ find_package(fmt CONFIG REQUIRED)
 find_path(BSHOSHANY_THREAD_POOL_INCLUDE_DIRS "BS_thread_pool.hpp")
 find_package(lodepng CONFIG REQUIRED)
 find_package(Boost REQUIRED COMPONENTS random)
-target_include_directories(${PROJECT_NAME} PRIVATE ${BSHOSHANY_THREAD_POOL_INCLUDE_DIRS})
-target_link_libraries(${PROJECT_NAME} PRIVATE
+target_include_directories(omnichroma
+  PUBLIC
+    ${BSHOSHANY_THREAD_POOL_INCLUDE_DIRS}
+    src
+)
+target_link_libraries(omnichroma PUBLIC
   Threads::Threads
   fmt::fmt
   lodepng
   Boost::boost Boost::random
 )
 
+add_executable(main src/main.cpp)
+target_link_libraries(main PRIVATE omnichroma)
+
 enable_testing()
 add_subdirectory(test/uniseed)
+add_subdirectory(bench/sets)
 
-set_property(DIRECTORY PROPERTY VS_STARTUP_PROJECT ${PROJECT_NAME})
+set_property(DIRECTORY PROPERTY VS_STARTUP_PROJECT main)

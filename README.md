@@ -43,6 +43,50 @@ Num threads = 16
   - Use identity function instead of `std::hash<int>{}()`. GCC uses identity function for hashing `int` while MSVC uses  hash.
   - Use `CoordSet = boost::unordered_set<Coord, std::hash<Coord>>`. MSVC/GCC have different `std::unordered_set` implementation. Using `boost::unordered_set` makes `generate()` runs about 30% slower than `std::unordered_set`. I also tried various `tsl` hash sets but nothing beats `std::unordered_set`.
 
+## Benchmark
+
+With identity function for `int` hash: (MSVC 64-bit)
+```text
+Num threads = 16
+Benching image 256x128...
+  std::unordered_set: repeat 100 times, total = 154.260918s, avg = 1.542609s
+boost::unordered_set: repeat 100 times, total = 153.523095s, avg = 1.535231s
+  tsl::hopscotch_set: repeat 100 times, total = 161.403601s, avg = 1.614036s
+    tsl::ordered_set: repeat 100 times, total = 158.509282s, avg = 1.585093s
+     tsl::sparse_set: repeat 100 times, total = 156.207256s, avg = 1.562073s
+      tsl::robin_set: repeat 100 times, total = 162.986392s, avg = 1.629864s
+Benching image 512x512...
+  std::unordered_set: repeat 10 times, total = 150.168758s, avg = 15.016876s
+boost::unordered_set: repeat 10 times, total = 189.231126s, avg = 18.923113s
+  tsl::hopscotch_set: repeat 10 times, total = 190.542528s, avg = 19.054253s
+    tsl::ordered_set: repeat 10 times, total = 153.893425s, avg = 15.389342s
+     tsl::sparse_set: repeat 10 times, total = 159.534610s, avg = 15.953461s
+      tsl::robin_set: repeat 10 times, total = 168.410074s, avg = 16.841007s
+```
+
+With FNV-1a for `int` hash:
+```text
+Num threads = 16
+Benching image 256x128...
+  std::unordered_set: repeat 100 times, total = 155.224097s, avg = 1.552241s
+boost::unordered_set: repeat 100 times, total = 150.984269s, avg = 1.509843s
+  tsl::hopscotch_set: repeat 100 times, total = 157.286525s, avg = 1.572865s
+    tsl::ordered_set: repeat 100 times, total = 158.560118s, avg = 1.585601s
+     tsl::sparse_set: repeat 100 times, total = 144.522430s, avg = 1.445224s
+      tsl::robin_set: repeat 100 times, total = 150.278421s, avg = 1.502784s
+Benching image 512x512...
+  std::unordered_set: repeat 10 times, total = 148.812345s, avg = 14.881235s
+boost::unordered_set: repeat 10 times, total = 187.575723s, avg = 18.757572s
+  tsl::hopscotch_set: repeat 10 times, total = 179.597619s, avg = 17.959762s
+    tsl::ordered_set: repeat 10 times, total = 164.498476s, avg = 16.449848s
+     tsl::sparse_set: repeat 10 times, total = 170.278597s, avg = 17.027860s
+      tsl::robin_set: repeat 10 times, total = 182.980808s, avg = 18.298081s
+```
+
+MSVC uses FNV-1a for `std::hash<int>` and their `std::unordered_set` seems to be even faster than identity function int hash, while all other hash sets seem to run slower on 512x512 images. Benchmarks of generating 256x128 images are a little bit weird though.
+
+`tsl`'s sets are supposed to be faster than `std::unordered_set`, especially `tsl::robin_set`. However it is not the case here.
+
 ## How to configure with CMake
 
 ### Linux

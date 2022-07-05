@@ -7,6 +7,10 @@
     "lodepng",
     "doctest",
     "boost-random",
-    "boost-unordered"
+    "boost-unordered",
+    "tsl-hopscotch-map",
+    "tsl-ordered-map",
+    "tsl-sparse-map",
+    "robin-map"
   ]
 }
