@@ -22,6 +22,3 @@ jobs:
           buildPresetCmdString: "[`--build`, `--preset`, `$[env.BUILD_PRESET_NAME]`, `--config`, `Release`]"
           testPreset: 'ninjam-linux'
           testPresetCmdString: "[`--preset`, `$[env.TEST_PRESET_NAME]`, `-C`, `Release`]"
-
-      - name: Run benchmarks
-        run: ./build/ninjam-linux/bench/sets/Release/bench_sets
