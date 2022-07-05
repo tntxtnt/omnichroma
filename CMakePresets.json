@@ -106,7 +106,7 @@
       ],
       "generator": "Ninja Multi-Config",
       "environment": {
-        "VCPKG_TRIPLET": "x64-linux"
+        "VCPKG_TARGET_TRIPLET": "x64-linux"
       }
     }
   ],
