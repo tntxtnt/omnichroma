@@ -10,7 +10,7 @@ jobs:
           submodules: true
 
       - name: Fix robin-map CMake config
-        run: cd /home/runner/work/omnichroma/omnichroma/vcpkg; git apply ../robin-map-cmake-config.patch; cd ..
+        run: cd /home/runner/work/omnichroma/omnichroma/vcpkg; echo 'configure_file("${CURRENT_PACKAGES_DIR}/share/${PORT}/tsl-robin-mapConfig.cmake" "${CURRENT_PACKAGES_DIR}/share/${PORT}/robin-mapConfig.cmake" COPYONLY)' >> ports/robin-map/portfile.cmake
 
       - uses: lukka/get-cmake@latest
 
