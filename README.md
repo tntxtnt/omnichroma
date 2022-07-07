@@ -38,8 +38,10 @@ Num threads = 16
 (my CPU is Ryzen 7 4800H)
 
 ## What's new
+
+- v0.0.3: Add benchmarks for `std::unordered_set`, `boost::unordered_set`, `tsl::hopscotch_set`, `tsl::ordered_set`, `tsl::sparse_set`, and `tsl::robin_set`
 - v0.0.2: Produce reproducable images from `seed` (and starting point). Tested on Windows (msvc and msys2) and Linux (Ubuntu). **Note**: 32-bit version will produce different images with 64-bit version (32-bit version will fail `uniseed` test).
-  - Use a shuffle function from cppreference (`cppref_shuffle`) to generate random colors.
+  - Use a shuffle function from cppreference (`cppref_shuffle`) and `boost::random::uniform_int_distribution` to generate random colors.
   - Use identity function instead of `std::hash<int>{}()`. GCC uses identity function for hashing `int` while MSVC uses  hash.
   - Use `CoordSet = boost::unordered_set<Coord, std::hash<Coord>>`. MSVC/GCC have different `std::unordered_set` implementation. Using `boost::unordered_set` makes `generate()` runs about 30% slower than `std::unordered_set`. I also tried various `tsl` hash sets but nothing beats `std::unordered_set`.
 
@@ -106,7 +108,7 @@ boost::unordered_set: repeat 10 times, total = 253.657342s, avg = 25.365734s
       tsl::robin_set: repeat 10 times, total = 186.689562s, avg = 18.668956s
 ```
 
-`tsl`'s sets are faster than `std::unordered_set` hereh.
+`tsl`'s sets are faster than `std::unordered_set` here. `tsl::ordered_set` appears to be the fastest.
 
 
 ## How to configure with CMake

@@ -20,11 +20,16 @@ add_library(omnichroma STATIC
   src/bitmap.h
   src/bitmap.cpp
 )
-find_package(Threads REQUIRED)
+
 find_package(fmt CONFIG REQUIRED)
-find_path(BSHOSHANY_THREAD_POOL_INCLUDE_DIRS "BS_thread_pool.hpp")
-find_package(lodepng CONFIG REQUIRED)
+# saveToPng
+find_package(lodepng CONFIG REQUIRED)          
+# boost::random::uniform_int_distribution
 find_package(Boost REQUIRED COMPONENTS random)
+# Thread pool
+find_package(Threads REQUIRED)
+find_path(BSHOSHANY_THREAD_POOL_INCLUDE_DIRS "BS_thread_pool.hpp" REQUIRED)
+
 target_include_directories(omnichroma
   PUBLIC
     ${BSHOSHANY_THREAD_POOL_INCLUDE_DIRS}
@@ -38,10 +43,13 @@ target_link_libraries(omnichroma PUBLIC
 )
 
 add_executable(main src/main.cpp)
+find_path(BOOST_UNORDERED_SET_INCLUDE_DIRS "boost/unordered_set.hpp" REQUIRED)
+target_include_directories(main PRIVATE ${BOOST_UNORDERED_SET_INCLUDE_DIRS})
 target_link_libraries(main PRIVATE omnichroma)
+set_property(DIRECTORY PROPERTY VS_STARTUP_PROJECT main)
+
+add_subdirectory(bench/sets)
 
 enable_testing()
 add_subdirectory(test/uniseed)
-add_subdirectory(bench/sets)
 
-set_property(DIRECTORY PROPERTY VS_STARTUP_PROJECT main)
