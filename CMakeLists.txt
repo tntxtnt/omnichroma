@@ -19,6 +19,7 @@ add_library(omnichroma STATIC
   src/coord.cpp
   src/bitmap.h
   src/bitmap.cpp
+  src/coordset.h
 )
 
 find_package(fmt CONFIG REQUIRED)

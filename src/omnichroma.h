@@ -5,6 +5,7 @@
 #include "color.h"
 #include "coord.h"
 #include "generate.h"
+#include "coordset.h"
 #include <BS_thread_pool.hpp>
 #include <lodepng.h>
 #include <fmt/ostream.h>
@@ -19,7 +20,7 @@
 #include <random>
 #include <boost/predef.h>
 
-template <class CoordSet = std::unordered_set<Coord>>
+template <class CoordSet = CoordStdUnorderedSet>
 class Omnichroma {
 public:
     static Omnichroma Image8x8() { return Omnichroma{8, 8, 4}; }
@@ -53,15 +54,15 @@ public:
     }
 
     auto getFilename() const -> std::string {
-        return fmt::format("{}-{}x{}-{}xy{}-{}-{}", seed, imageW, imageH, startX, startY, getPlatformName(),
-                           getArchName());
+        return fmt::format("{}-{}x{}-{}xy{}-{}-{}-{}{}", seed, imageW, imageH, startX, startY, getPlatformName(),
+                           getArchName(), CoordSet::name(), pPool ? "-mt" : "");
     }
 
     void saveBmp(std::string_view filename = "") const {
         Bitmap24bitPixels image{static_cast<uint32_t>(imageW), static_cast<uint32_t>(imageH)};
         for (int i = 0; i < imageH; ++i)
             for (int j = 0; j < imageW; ++j) image[i][j] = *buffer[i][j];
-        const std::string outFileName = filename.empty() ? outputFilename() + ".bmp" : std::string{filename};
+        const std::string outFileName = filename.empty() ? getFilename() + ".bmp" : std::string{filename};
         Bitmap24bit{image}.saveToFile(outFileName);
     }
 
@@ -73,7 +74,7 @@ public:
                 image[3 * (imageW * i + j) + 1] = buffer[i][j]->g;
                 image[3 * (imageW * i + j) + 2] = buffer[i][j]->b;
             }
-        const std::string outFileName = filename.empty() ? outputFilename() + ".png" : std::string{filename};
+        const std::string outFileName = filename.empty() ? getFilename() + ".png" : std::string{filename};
         unsigned error = lodepng::encode(outFileName, image, imageW, imageH, LCT_RGB);
         if (error) fmt::print(std::cerr, "lodepng encoder error {}: {}\n", error, lodepng_error_text(error));
     }
@@ -167,7 +168,7 @@ private:
     const uint32_t imageH;
     const uint32_t colorsPerChannel;
     Bitmap24bitOptionalPixels buffer;
-    CoordSet available;
+    CoordSet::type available;
     std::vector<Color> colors;
     uint32_t seed = 0;
     uint32_t startX = 0;

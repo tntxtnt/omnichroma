@@ -17,23 +17,22 @@ auto timeit(std::string_view name, int repeat, Func&& f) {
     const auto startTime = std::chrono::steady_clock::now();
     for (int i = 0; i < repeat; ++i) f();
     std::chrono::duration<double> elapsed = std::chrono::steady_clock::now() - startTime;
-    fmt::print("{:.6f}s, avg = {:.6f}s", elapsed.count(),
-               elapsed.count() / repeat);
+    fmt::print("{:.6f}s, avg = {:.6f}s", elapsed.count(), elapsed.count() / repeat);
     std::cout << std::endl;
 }
 
-template <class OmnichromaType>
-void benchImage256x128(std::string_view label, int repeat, unsigned int seed, BS::thread_pool& pool) {
+template <class CoordSetType>
+void benchImage256x128(std::string_view label, int repeat, unsigned int seed) {
     timeit(label, repeat, [&] {
-        auto img = OmnichromaType::Image256x128();
-        return img.generate(seed, 128, 64, &pool);
+        auto img = Omnichroma<CoordSetWrapper<CoordSetType>>::Image256x128();
+        return img.generate(seed, 128, 64);
     });
 }
 
-template <class OmnichromaType>
+template <class CoordSetType>
 void benchImage512x512(std::string_view label, int repeat, unsigned int seed, BS::thread_pool& pool) {
     timeit(label, repeat, [&] {
-        auto img = OmnichromaType::Image512x512();
+        auto img = Omnichroma<CoordSetWrapper<CoordSetType>>::Image512x512();
         return img.generate(seed, 256, 256, &pool);
     });
 }
@@ -47,32 +46,32 @@ auto main() -> int {
     fmt::print("Benching image 256x128...");
     std::cout << std::endl;
     int repeat = 100;
-    benchImage256x128<Omnichroma<>>( //
-        "  std::unordered_set", repeat, seed, pool);
-    benchImage256x128<Omnichroma<boost::unordered_set<Coord, std::hash<Coord>>>>( //
-        "boost::unordered_set", repeat, seed, pool);
-    benchImage256x128<Omnichroma<tsl::hopscotch_set<Coord>>>( //
-        "  tsl::hopscotch_set", repeat, seed, pool);
-    benchImage256x128<Omnichroma<tsl::ordered_set<Coord>>>( //
-        "    tsl::ordered_set", repeat, seed, pool);
-    benchImage256x128<Omnichroma<tsl::sparse_set<Coord>>>( //
-        "     tsl::sparse_set", repeat, seed, pool);
-    benchImage256x128<Omnichroma<tsl::robin_set<Coord>>>( //
-        "      tsl::robin_set", repeat, seed, pool);
+    benchImage256x128<std::unordered_set<Coord>>( //
+        "  std::unordered_set", repeat, seed);
+    benchImage256x128<boost::unordered_set<Coord, std::hash<Coord>>>( //
+        "boost::unordered_set", repeat, seed);
+    benchImage256x128<tsl::hopscotch_set<Coord>>( //
+        "  tsl::hopscotch_set", repeat, seed);
+    benchImage256x128<tsl::ordered_set<Coord>>( //
+        "    tsl::ordered_set", repeat, seed);
+    benchImage256x128<tsl::sparse_set<Coord>>( //
+        "     tsl::sparse_set", repeat, seed);
+    benchImage256x128<tsl::robin_set<Coord>>( //
+        "      tsl::robin_set", repeat, seed);
 
     fmt::print("Benching image 512x512...");
     std::cout << std::endl;
     repeat = 10;
-    benchImage512x512<Omnichroma<>>( //
+    benchImage512x512<std::unordered_set<Coord>>( //
         "  std::unordered_set", repeat, seed, pool);
-    benchImage512x512<Omnichroma<boost::unordered_set<Coord, std::hash<Coord>>>>( //
+    benchImage512x512<boost::unordered_set<Coord, std::hash<Coord>>>( //
         "boost::unordered_set", repeat, seed, pool);
-    benchImage512x512<Omnichroma<tsl::hopscotch_set<Coord>>>( //
+    benchImage512x512<tsl::hopscotch_set<Coord>>( //
         "  tsl::hopscotch_set", repeat, seed, pool);
-    benchImage512x512<Omnichroma<tsl::ordered_set<Coord>>>( //
+    benchImage512x512<tsl::ordered_set<Coord>>( //
         "    tsl::ordered_set", repeat, seed, pool);
-    benchImage512x512<Omnichroma<tsl::sparse_set<Coord>>>( //
+    benchImage512x512<tsl::sparse_set<Coord>>( //
         "     tsl::sparse_set", repeat, seed, pool);
-    benchImage512x512<Omnichroma<tsl::robin_set<Coord>>>( //
+    benchImage512x512<tsl::robin_set<Coord>>( //
         "      tsl::robin_set", repeat, seed, pool);
 }

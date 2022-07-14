@@ -14,6 +14,7 @@
 #include <vector>
 #include <boost/unordered_set.hpp>
 #include <lodepng.h>
+#include "coordset.h"
 
 TEST_CASE("Testing generate shuffled colors function") {
     unsigned int seed = 123;
@@ -47,18 +48,25 @@ TEST_CASE("Testing coord hash function") {
     for (auto& [coord, hash] : testCases) CHECK(std::hash<Coord>{}(coord) == hash);
 }
 
+TEST_CASE("Testing coord set names") {
+    CHECK(CoordStdUnorderedSet::name() == "sus");
+    CHECK(CoordBoostUnorderedSet::name() == "bus");
+}
+
 TEST_CASE("Testing omnichroma") {
     const unsigned int seed = 123;
     BS::thread_pool pool;
     fmt::print("Num threads = {}\n", pool.get_thread_count());
-    using omnichroma_t = Omnichroma<boost::unordered_set<Coord, std::hash<Coord>>>;
+    using omnichroma_t = Omnichroma<CoordBoostUnorderedSet>;
 
     {
         auto img = omnichroma_t::Image8x8();
         img.generate(seed, 4, 4);
         img.savePng();
+        const std::string filename1 = img.getFilename() + ".png";
         img.generate(seed, 4, 4, &pool);
         img.savePng();
+        const std::string filename2 = img.getFilename() + ".png";
 
         const std::vector<unsigned char> expected{
             255, 255, 255, 85,  255, 255, 85,  170, 170, 255, 0,   170, 170, 0,   170, 85,  255, 0,   170, 170,
@@ -75,7 +83,7 @@ TEST_CASE("Testing omnichroma") {
             std::vector<unsigned char> data;
             unsigned int imgW;
             unsigned int imgH;
-            lodepng::decode(data, imgW, imgH, "123-8x8-4xy4.png", LCT_RGB);
+            lodepng::decode(data, imgW, imgH, filename1, LCT_RGB);
             // fmt::print("{}\n", data);
             // std::cout << std::flush;
             CHECK(imgW == 8);
@@ -86,7 +94,7 @@ TEST_CASE("Testing omnichroma") {
             std::vector<unsigned char> data;
             unsigned int imgW;
             unsigned int imgH;
-            lodepng::decode(data, imgW, imgH, "123-8x8-4xy4-mt.png", LCT_RGB);
+            lodepng::decode(data, imgW, imgH, filename2, LCT_RGB);
             CHECK(imgW == 8);
             CHECK(imgH == 8);
             CHECK(data == expected);
@@ -96,8 +104,10 @@ TEST_CASE("Testing omnichroma") {
         auto img = omnichroma_t::Image32x16();
         img.generate(seed, 16, 8);
         img.savePng();
+        const std::string filename1 = img.getFilename() + ".png";
         img.generate(seed, 16, 8, &pool);
         img.savePng();
+        const std::string filename2 = img.getFilename() + ".png";
 
         const std::vector<unsigned char> expected{
             182, 109, 218, 182, 182, 109, 182, 72,  72,  182, 145, 109, 255, 145, 72,  255, 109, 109, 109, 36,  36,
@@ -178,7 +188,7 @@ TEST_CASE("Testing omnichroma") {
             std::vector<unsigned char> data;
             unsigned int imgW;
             unsigned int imgH;
-            lodepng::decode(data, imgW, imgH, "123-32x16-16xy8.png", LCT_RGB);
+            lodepng::decode(data, imgW, imgH, filename1, LCT_RGB);
             // fmt::print("{}\n", data);
             // std::cout << std::flush;
             CHECK(imgW == 32);
@@ -189,7 +199,7 @@ TEST_CASE("Testing omnichroma") {
             std::vector<unsigned char> data;
             unsigned int imgW;
             unsigned int imgH;
-            lodepng::decode(data, imgW, imgH, "123-32x16-16xy8-mt.png", LCT_RGB);
+            lodepng::decode(data, imgW, imgH, filename2, LCT_RGB);
             CHECK(imgW == 32);
             CHECK(imgH == 16);
             CHECK(data == expected);

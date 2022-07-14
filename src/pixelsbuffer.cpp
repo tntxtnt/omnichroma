@@ -1,4 +1,4 @@
-#include "omnichroma.h"
+#include "pixelsbuffer.h"
 
 Bitmap24bitOptionalPixels::Bitmap24bitOptionalPixels(uint32_t width, uint32_t height)
 : width{width}, height{height}, data{std::make_unique<value_type[]>(static_cast<size_t>(width) * height)} {}

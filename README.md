@@ -39,6 +39,8 @@ Num threads = 16
 
 ## What's new
 
+- v0.2.0:
+  - Add `CoordSetWrapper` which wraps arounds a set of coords and provides a name for that set. Break backwards compability with v0.1.0.
 - v0.1.0:
   - Add command line interface app.
   - Add compiler name (`mvc` for MSVC, `mgw` for MinGW, `gcc` for gcc, `cla` for Clang, `unk` for unknown compilers), and architecture (32, 64 bit, or 00 for unknown architectures) to generated image name.

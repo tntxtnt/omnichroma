@@ -7,10 +7,12 @@ jobs:
     env:
       CXX: g++-11
     steps:
-      - name: Install GCC11
+      - name: Install GCC11 and other stuffs
         run: |
           sudo apt update
           sudo apt install g++-11
+          sudo apt install libx11-dev libxft-dev libxext-dev
+          sudo apt install libgl1-mesa-dev
 
       - uses: actions/checkout@v2
         with:

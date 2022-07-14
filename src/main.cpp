@@ -54,8 +54,9 @@ OmnichromaType construct(unsigned dimensionId) {
     }
 }
 
-template <class CoordSet = std::unordered_set<Coord>>
-void generate(unsigned seed, unsigned dimensionId, unsigned startX, unsigned startY, std::string_view coordSetName) {
+
+template <class CoordSet = CoordStdUnorderedSet>
+void generate(unsigned seed, unsigned dimensionId, unsigned startX, unsigned startY) {
     using omnichroma_t = Omnichroma<CoordSet>;
     timeit([=] {
         auto img = construct<omnichroma_t>(dimensionId);
@@ -66,9 +67,26 @@ void generate(unsigned seed, unsigned dimensionId, unsigned startX, unsigned sta
             fmt::print("Num threads = {}\n", pool.get_thread_count());
             img.generate(seed, startX, startY, &pool);
         }
-        img.savePng(fmt::format("{}-{}.png", img.getFilename(), coordSetName));
+        img.savePng();
     });
 }
+
+struct CoordTslHopscotchSet {
+    using type = tsl::hopscotch_set<Coord>;
+    static auto name() -> std::string { return "hop"; }
+};
+struct CoordTslUnorderedSet {
+    using type = tsl::ordered_set<Coord>;
+    static auto name() -> std::string { return "ord"; }
+};
+struct CoordTslSparseSet {
+    using type = tsl::sparse_set<Coord>;
+    static auto name() -> std::string { return "spa"; }
+};
+struct CoordTslRobinSet {
+    using type = tsl::robin_set<Coord>;
+    static auto name() -> std::string { return "rob"; }
+};
 
 auto main(int argc, char** argv) -> int {
     unsigned int seed = std::random_device{}();
@@ -122,22 +140,22 @@ auto main(int argc, char** argv) -> int {
 
     switch (coordSetTypeId) {
     case 1: //
-        generate<boost::unordered_set<Coord, std::hash<Coord>>>(seed, dimensionId, *startX, *startY, "bus");
+        generate<CoordBoostUnorderedSet>(seed, dimensionId, *startX, *startY);
         break;
     case 2: //
-        generate<tsl::hopscotch_set<Coord>>(seed, dimensionId, *startX, *startY, "hop");
+        generate<CoordTslHopscotchSet>(seed, dimensionId, *startX, *startY);
         break;
     case 3: //
-        generate<tsl::ordered_set<Coord>>(seed, dimensionId, *startX, *startY, "ord");
+        generate<CoordTslUnorderedSet>(seed, dimensionId, *startX, *startY);
         break;
     case 4: //
-        generate<tsl::sparse_set<Coord>>(seed, dimensionId, *startX, *startY, "spa");
+        generate<CoordTslSparseSet>(seed, dimensionId, *startX, *startY);
         break;
     case 5: //
-        generate<tsl::robin_set<Coord>>(seed, dimensionId, *startX, *startY, "rob");
+        generate<CoordTslRobinSet>(seed, dimensionId, *startX, *startY);
         break;
     default: //
-        generate<std::unordered_set<Coord>>(seed, dimensionId, *startX, *startY, "sus");
+        generate(seed, dimensionId, *startX, *startY);
         break;
     }
 }
