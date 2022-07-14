@@ -17,6 +17,7 @@
 #include <vector>
 #include <iostream>
 #include <random>
+#include <boost/predef.h>
 
 template <class CoordSet = std::unordered_set<Coord>>
 class Omnichroma {
@@ -29,7 +30,7 @@ public:
     static Omnichroma Image2048x1024() { return Omnichroma{2048, 1024, 128}; }
     static Omnichroma Image4096x4096() { return Omnichroma{4096, 4096, 256}; }
 
-    void generate(uint32_t seed, int startX, int startY, BS::thread_pool* pPool = nullptr) {
+    void generate(uint32_t seed, uint32_t startX, uint32_t startY, BS::thread_pool* pPool = nullptr) {
         this->seed = seed;
         this->pPool = pPool;
         this->startX = startX;
@@ -51,18 +52,20 @@ public:
                        color);
     }
 
-    auto outputFilename() const -> std::string {
-        return fmt::format("{}-{}x{}-{}xy{}{}", seed, imageW, imageH, startX, startY, pPool ? "-mt" : "");
+    auto getFilename() const -> std::string {
+        return fmt::format("{}-{}x{}-{}xy{}-{}-{}", seed, imageW, imageH, startX, startY, getPlatformName(),
+                           getArchName());
     }
 
-    void saveBmp() const {
+    void saveBmp(std::string_view filename = "") const {
         Bitmap24bitPixels image{static_cast<uint32_t>(imageW), static_cast<uint32_t>(imageH)};
         for (int i = 0; i < imageH; ++i)
             for (int j = 0; j < imageW; ++j) image[i][j] = *buffer[i][j];
-        Bitmap24bit{image}.saveToFile(outputFilename() + ".bmp");
+        const std::string outFileName = filename.empty() ? outputFilename() + ".bmp" : std::string{filename};
+        Bitmap24bit{image}.saveToFile(outFileName);
     }
 
-    void savePng() const {
+    void savePng(std::string_view filename = "") const {
         std::vector<unsigned char> image(size_t{3} * imageW * imageH);
         for (int i = 0; i < imageH; ++i)
             for (int j = 0; j < imageW; ++j) {
@@ -70,13 +73,30 @@ public:
                 image[3 * (imageW * i + j) + 1] = buffer[i][j]->g;
                 image[3 * (imageW * i + j) + 2] = buffer[i][j]->b;
             }
-        unsigned error = lodepng::encode(outputFilename() + ".png", image, imageW, imageH, LCT_RGB);
+        const std::string outFileName = filename.empty() ? outputFilename() + ".png" : std::string{filename};
+        unsigned error = lodepng::encode(outFileName, image, imageW, imageH, LCT_RGB);
         if (error) fmt::print(std::cerr, "lodepng encoder error {}: {}\n", error, lodepng_error_text(error));
     }
 
 private:
     Omnichroma(uint32_t imageW, uint32_t imageH, uint32_t colorsPerChannel)
     : imageW{imageW}, imageH{imageH}, colorsPerChannel{colorsPerChannel}, buffer{imageW, imageH} {}
+
+    auto outputFilename() const -> std::string { return fmt::format("{}{}", getFilename(), pPool ? "-mt" : ""); }
+
+    static auto getPlatformName() -> std::string {
+        if constexpr (static_cast<bool>(BOOST_COMP_CLANG)) return "cla";
+        if constexpr (static_cast<bool>(BOOST_COMP_MSVC)) return "mvc";
+        if constexpr (static_cast<bool>(BOOST_PLAT_MINGW)) return "mgw";
+        if constexpr (static_cast<bool>(BOOST_COMP_GNUC)) return "gcc";
+        return "unk";
+    }
+
+    static auto getArchName() -> std::string {
+        if constexpr (static_cast<bool>(BOOST_ARCH_X86_64)) return "64";
+        if constexpr (static_cast<bool>(BOOST_ARCH_X86_32)) return "32";
+        return "00";
+    }
 
     auto minDiffCoordScore(Coord coord, Color color) -> int {
         int res = 255 * 255 * 3 + 1;
@@ -150,7 +170,7 @@ private:
     CoordSet available;
     std::vector<Color> colors;
     uint32_t seed = 0;
-    int startX = 0;
-    int startY = 0;
+    uint32_t startX = 0;
+    uint32_t startY = 0;
     BS::thread_pool* pPool = nullptr;
 };

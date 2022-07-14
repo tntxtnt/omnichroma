@@ -55,7 +55,8 @@
       "inherits": "vs2022",
       "architecture": "Win32",
       "environment": {
-        "VCPKG_TARGET_TRIPLET": "x86-windows"
+        "VCPKG_TARGET_TRIPLET": "x86-windows",
+        "ARCHITECTURE_32BIT": "1"
       }
     },
     {
@@ -74,12 +75,11 @@
       }
     },
     {
-      "name": "ninjam-msys2-novcpkg",
-      "displayName": "Ninja Multi-Config MSYS2 MINGW (run in MINGW64 console)",
-      "inherits": "windows-only",
-      "generator": "Ninja Multi-Config",
-      "cacheVariables": {
-        "CMAKE_CXX_COMPILER": "g++"
+      "name": "ninjam-msvc-32",
+      "displayName": "Ninja Multi-Config MSVC 32-bit, using vcpkg as submodule (run vcvars32.bat first)",
+      "inherits": ["ninjam-msvc"],
+      "environment": {
+        "VCPKG_TARGET_TRIPLET": "x86-windows"
       }
     },
     {
@@ -95,6 +95,14 @@
       },
       "environment": {
         "VCPKG_TARGET_TRIPLET": "x64-mingw-dynamic"
+      }
+    },
+    {
+      "name": "ninjam-msys2-32",
+      "displayName": "Ninja Multi-Config MSYS2 MINGW (run in MINGW32 console), using vcpkg as submodule",
+      "inherits": ["ninjam-msys2"],
+      "environment": {
+        "VCPKG_TARGET_TRIPLET": "x86-mingw-dynamic"
       }
     },
     {
@@ -144,19 +152,25 @@
     {
       "name": "ninjam-msvc",
       "configurePreset": "ninjam-msvc",
-      "displayName": "Ninja Multi-Config MSVC, using vcpkg as submodule",
+      "displayName": "Ninja Multi-Config MSVC 64-bit, using vcpkg as submodule",
       "inherits": "windows-only"
     },
     {
-      "name": "ninjam-msys2-novcpkg",
-      "displayName": "Ninja Multi-Config MSYS2 MINGW build",
-      "configurePreset": "ninjam-msys2-novcpkg",
+      "name": "ninjam-msvc-32",
+      "configurePreset": "ninjam-msvc-32",
+      "displayName": "Ninja Multi-Config MSVC 32-bit, using vcpkg as submodule",
       "inherits": "windows-only"
     },
     {
       "name": "ninjam-msys2",
-      "displayName": "Ninja Multi-Config MSYS2 MINGW build, using vcpkg as submodule",
       "configurePreset": "ninjam-msys2",
+      "displayName": "Ninja Multi-Config MSYS2 MINGW 64-bit build, using vcpkg as submodule",
+      "inherits": "windows-only"
+    },
+    {
+      "name": "ninjam-msys2-32",
+      "configurePreset": "ninjam-msys2-32",
+      "displayName": "Ninja Multi-Config MSYS2 MINGW 32-bit build, using vcpkg as submodule",
       "inherits": "windows-only"
     },
     {
@@ -206,19 +220,25 @@
     {
       "name": "ninjam-msvc",
       "configurePreset": "ninjam-msvc",
-      "displayName": "Ninja Multi-Config MSVC test, remember to pass -C <Debug/Release> to ctest",
+      "displayName": "Ninja Multi-Config MSVC 64-bit test, remember to pass -C <Debug/Release> to ctest",
       "inherits": ["base", "windows-only"]
     },
     {
-      "name": "ninjam-msys2-novcpkg",
-      "displayName": "Ninja Multi-Config MSYS2 MINGW test, remember to pass -C <Debug/Release> to ctest",
-      "configurePreset": "ninjam-msys2-novcpkg",
+      "name": "ninjam-msvc-32",
+      "configurePreset": "ninjam-msvc-32",
+      "displayName": "Ninja Multi-Config MSVC 32-bit test, remember to pass -C <Debug/Release> to ctest",
       "inherits": ["base", "windows-only"]
     },
     {
       "name": "ninjam-msys2",
-      "displayName": "Ninja Multi-Config MSYS2 MINGW test, remember to pass -C <Debug/Release> to ctest",
       "configurePreset": "ninjam-msys2",
+      "displayName": "Ninja Multi-Config MSYS2 MINGW 64-bit test, remember to pass -C <Debug/Release> to ctest",
+      "inherits": ["base", "windows-only"]
+    },
+    {
+      "name": "ninjam-msys2-32",
+      "configurePreset": "ninjam-msys2-32",
+      "displayName": "Ninja Multi-Config MSYS2 MINGW 32-bit test, remember to pass -C <Debug/Release> to ctest",
       "inherits": ["base", "windows-only"]
     },
     {

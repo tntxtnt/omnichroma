@@ -44,8 +44,13 @@ target_link_libraries(omnichroma PUBLIC
 
 add_executable(main src/main.cpp)
 find_path(BOOST_UNORDERED_SET_INCLUDE_DIRS "boost/unordered_set.hpp" REQUIRED)
+find_package(CLI11 CONFIG REQUIRED)
 target_include_directories(main PRIVATE ${BOOST_UNORDERED_SET_INCLUDE_DIRS})
-target_link_libraries(main PRIVATE omnichroma)
+target_link_libraries(main
+  PRIVATE
+    omnichroma
+    CLI11::CLI11
+)
 set_property(DIRECTORY PROPERTY VS_STARTUP_PROJECT main)
 
 add_subdirectory(bench/sets)

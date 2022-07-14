@@ -1,14 +1,15 @@
 #pragma once
 
 #include <cstddef>
+#include <cstdint>
 #include <functional>
 #include <ostream>
 #include <array>
 #include <bit>
 
 struct Coord {
-    int x = 0;
-    int y = 0;
+    uint32_t x = 0;
+    uint32_t y = 0;
     auto operator==(const Coord& rhs) const -> bool;
 };
 

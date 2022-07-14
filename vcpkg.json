@@ -1,6 +1,6 @@
 {
   "name": "omnichroma",
-  "version": "0.0.3",
+  "version": "0.1.0",
   "dependencies": [
     "fmt",
     "bshoshany-thread-pool",
@@ -11,6 +11,8 @@
     "tsl-hopscotch-map",
     "tsl-ordered-map",
     "tsl-sparse-map",
-    "robin-map"
+    "robin-map",
+    "cli11",
+    "boost-predef"
   ]
 }
