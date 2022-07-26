@@ -21,3 +21,6 @@ jobs:
           uname -a
           which cmake
           cmake --list-presets
+          cmake --preset ninjam-msys2
+          cmake --build --preset ninjam-msys2 --config Release
+          ctest --preset  --preset -C Release

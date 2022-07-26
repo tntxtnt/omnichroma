@@ -94,7 +94,9 @@
         "CMAKE_CXX_COMPILER": "g++"
       },
       "environment": {
-        "VCPKG_TARGET_TRIPLET": "x64-mingw-dynamic"
+        "VCPKG_DEFAULT_HOST_TRIPLET": "x64-mingw-dynamic",
+        "VCPKG_TARGET_TRIPLET": "x64-mingw-dynamic",
+        "VCPKG_DEFAULT_TRIPLET": "x64-mingw-dynamic"
       }
     },
     {
@@ -102,7 +104,9 @@
       "displayName": "Ninja Multi-Config MSYS2 MINGW (run in MINGW32 console), using vcpkg as submodule",
       "inherits": ["ninjam-msys2"],
       "environment": {
-        "VCPKG_TARGET_TRIPLET": "x86-mingw-dynamic"
+        "VCPKG_DEFAULT_HOST_TRIPLET": "x86-mingw-dynamic",
+        "VCPKG_TARGET_TRIPLET": "x86-mingw-dynamic",
+        "VCPKG_DEFAULT_TRIPLET": "x86-mingw-dynamic"
       }
     },
     {
