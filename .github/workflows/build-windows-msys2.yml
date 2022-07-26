@@ -1,0 +1,33 @@
+name: build-windows-msys2
+on: [push, workflow_dispatch]
+
+jobs:
+  msys2-mingw64:
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: msys2 {0}
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: true
+
+      - uses: msys2/setup-msys2@v2
+        with:
+          msystem: MINGW64
+          update: true
+          install: mingw-w64-x86_64-gcc
+
+      - uses: lukka/get-cmake@latest
+
+      - name: Restore artifacts, or setup vcpkg (do not install any package)
+        uses: lukka/run-vcpkg@v10
+
+      - name: Run CMake consuming CMakePreset.json and vcpkg.json by mean of vcpkg.
+        uses: lukka/run-cmake@v10
+        with:
+          configurePreset: 'ninjam-msys2'
+          buildPreset: 'ninjam-msys2'
+          buildPresetCmdString: "[`--build`, `--preset`, `$[env.BUILD_PRESET_NAME]`, `--config`, `Release`]"
+          testPreset: 'ninjam-msys2'
+          testPresetCmdString: "[`--preset`, `$[env.TEST_PRESET_NAME]`, `-C`, `Release`]"
