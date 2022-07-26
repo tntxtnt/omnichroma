@@ -16,18 +16,10 @@ jobs:
         with:
           msystem: MINGW64
           update: true
-          install: mingw-w64-x86_64-gcc
+          install: mingw-w64-x86_64-{gcc,cmake,ninja}
 
-      - uses: lukka/get-cmake@latest
-
-      - name: Restore artifacts, or setup vcpkg (do not install any package)
-        uses: lukka/run-vcpkg@v10
-
-      - name: Run CMake consuming CMakePreset.json and vcpkg.json by mean of vcpkg.
-        uses: lukka/run-cmake@v10
-        with:
-          configurePreset: 'ninjam-msys2'
-          buildPreset: 'ninjam-msys2'
-          buildPresetCmdString: "[`--build`, `--preset`, `$[env.BUILD_PRESET_NAME]`, `--config`, `Release`]"
-          testPreset: 'ninjam-msys2'
-          testPresetCmdString: "[`--preset`, `$[env.TEST_PRESET_NAME]`, `-C`, `Release`]"
+      - name: build-and-test
+        run: |
+          cmake --preset ninjam-msys2
+          cmake --build --preset ninjam-msys2 --config Release
+          ctest --preset  --preset -C Release
