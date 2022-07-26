@@ -4,9 +4,6 @@ on: [push, workflow_dispatch]
 jobs:
   build:
     runs-on: windows-latest
-    defaults:
-      run:
-        shell: msys2 {0}
     steps:
       - uses: actions/checkout@v3
         with:
@@ -16,9 +13,10 @@ jobs:
         with:
           msystem: MINGW64
           update: true
-          install: mingw-w64-x86_64-gcc mingw-w64-x86_64-cmake mingw-w64-x86_64-ninja
+          install: gcc cmake ninja
 
       - name: build-and-test
+        shell: msys2 {0}
         run: |
           cmake --preset ninjam-msys2
           cmake --build --preset ninjam-msys2 --config Release
