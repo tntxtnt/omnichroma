@@ -1,5 +1,5 @@
 name: build-windows-msys2
-on: [push, workflow_dispatch]
+on: [workflow_dispatch]
 
 jobs:
   build:
@@ -17,9 +17,13 @@ jobs:
 
       - name: build-and-test
         shell: msys2 {0}
+        env:
+          VCPKG_TARGET_TRIPLET: x64-mingw-dynamic
+          VCPKG_DEFAULT_TRIPLET: x64-mingw-dynamic
         run: |
           uname -a
           which cmake
+          env
           cmake --list-presets
           cmake --preset ninjam-msys2
           cmake --build --preset ninjam-msys2 --config Release
